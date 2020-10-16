@@ -69,7 +69,7 @@ func main() {
 	log.SetOutput(logFile)
 
 	// attempt to connect to both read and write db
-	readDb, err = sql.Open("mysql", "admin:0uYMW%rQ1ZJxQE972gDW@tcp(dummyappdatabase.cogjdqpkoljl.ca-central-1.rds.amazonaws.com:3306)/DummyApp")
+	readDb, err = sql.Open("mysql", "admin:PWD@tcp(dummyappdatabase.cogjdqpkoljl.ca-central-1.rds.amazonaws.com:3306)/DummyApp")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,7 +84,7 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Println("connection to read database succeeded")
-	writeDb, err = sql.Open("mysql", "admin:0uYMW%rQ1ZJxQE972gDW@tcp(dummyappdatabase.cogjdqpkoljl.ca-central-1.rds.amazonaws.com:3306)/DummyApp")
+	writeDb, err = sql.Open("mysql", "admin:PWD@tcp(dummyappdatabase.cogjdqpkoljl.ca-central-1.rds.amazonaws.com:3306)/DummyApp")
 	if err != nil {
 		log.Fatal(err)
 	}
