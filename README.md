@@ -41,6 +41,11 @@ The application uses a json configuration file passed to the application using -
 TODO: Provide details on inculded tests and how to run them
 
 # How to use?
-TODO: Provide example on how to use the deployed version of the app, basically this could be the curl commands to trigger each one of the supported operation (select, insert, update, delete). If a client test script is eventually added, an example of using the script should be included here
-
+```
+$ DummyApp -c ./DummyApp.json &
+$ curl localhost:8888/insert
+inserted id: 1234
+$ curl localhost:8888/select?id=1234
+id: 1234, lastUpdateTime: 2020-10-28 18:00:23
+```
 
