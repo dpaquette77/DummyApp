@@ -1,0 +1,17 @@
+{
+	"read_db": {
+		"server": "MYSQL_READ_HOSTNAME",
+		"database": "dummy_data",
+		"username": "READ_USERNAME",
+		"password": "READ_PASSORD"
+	},
+	"write_db": {
+		"server": "MYSQL_READ_HOSTNAME"
+		"database": "dummy_data",
+		"username": "WRITE_USERNAME",
+		"password": "WRITE_PASSORD"
+	},
+	"logfile": "DummyApp.log",
+	"port": 8888
+}
+

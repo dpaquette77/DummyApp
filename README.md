@@ -25,6 +25,13 @@ mysql -h YOUR_DB_HOST -u YOUR_DB_ADMIN_USER -p < create_mysql_database_schema.sq
 # Installation
 TODO: Provide installation steps
 
+# Configuration
+The application uses a json configuration file passed to the application using -c flag. See DummyApp.json.sample for the fairly self-explanatory configuration file. Things to configure are:
+* database connection details for reads 
+* database connection details for writes
+* file name of the application log
+* port on which the application listens
+
 # Tests
 TODO: Provide details on inculded tests and how to run them
 
