@@ -17,6 +17,11 @@ TODO
 * configurable through a settings file
 * writes events in a log file
 
+# Prerequisites
+* The application requires a MySQL database that can be created using create_mysql_database_schema.sql as follows (run the command in the same directory as the create_mysql_database_schema.sql file):
+```
+mysql -h YOUR_DB_HOST -u YOUR_DB_ADMIN_USER -p < create_mysql_database_schema.sql
+
 # Installation
 TODO: Provide installation steps
 
