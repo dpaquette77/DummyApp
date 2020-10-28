@@ -9,7 +9,7 @@ TODO
 
 # Features
 * the applications listens on a given port for the following http requests:
-  * /select performs a select on the database read database
+  * /select performs a select on the read replica database
   * /insert insert a row in the master database
   * /update updates a row in the master database
   * /delete deletes a row in the master database
