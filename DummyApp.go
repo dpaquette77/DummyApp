@@ -20,7 +20,7 @@ var writeDb *sql.DB
 // the content of the json config file
 type DummyAppConfig struct {
 	ReadDbConfig  ReadMySQLConnectionConfig  `json:"read_db"`
-	WtiteDbConfig WriteMySQLConnectionConfig `json:"write_db"`
+	WriteDbConfig WriteMySQLConnectionConfig `json:"write_db"`
 	Logfile       string                     `json:"logfile"`
 	Port          int                        `json:"port"`
 }
@@ -31,6 +31,7 @@ type ReadMySQLConnectionConfig struct {
 	Database string `json:"database"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Port     int    `json:"port"`
 }
 
 // WriteMySQLConnectionConfig contains all elements of a read only mysql conn
@@ -39,6 +40,7 @@ type WriteMySQLConnectionConfig struct {
 	Database string `json:"database"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Port     int    `json:"port"`
 }
 
 func main() {
@@ -69,7 +71,8 @@ func main() {
 	log.SetOutput(logFile)
 
 	// attempt to connect to both read and write db
-	readDb, err = sql.Open("mysql", "admin:PWD@tcp(dummyappdatabase.cogjdqpkoljl.ca-central-1.rds.amazonaws.com:3306)/DummyApp")
+	read_dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/DummyApp", appConfig.ReadDbConfig.Username, appConfig.ReadDbConfig.Password, appConfig.ReadDbConfig.Server, appConfig.ReadDbConfig.Port)
+	readDb, err = sql.Open("mysql", read_dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,7 +87,9 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Println("connection to read database succeeded")
-	writeDb, err = sql.Open("mysql", "admin:PWD@tcp(dummyappdatabase.cogjdqpkoljl.ca-central-1.rds.amazonaws.com:3306)/DummyApp")
+
+	write_dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/DummyApp", appConfig.WriteDbConfig.Username, appConfig.WriteDbConfig.Password, appConfig.WriteDbConfig.Server, appConfig.WriteDbConfig.Port)
+	writeDb, err = sql.Open("mysql", write_dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -116,7 +121,7 @@ func DummyHttpServer(w http.ResponseWriter, r *http.Request) {
 
 func DummyHttpServerInsert(w http.ResponseWriter, r *http.Request) {
 	// Prepare statement for insert
-	stmtInsert, err := writeDb.Prepare("INSERT INTO test_writes(id) VALUES (NULL)")
+	stmtInsert, err := writeDb.Prepare("INSERT INTO dummy_data(id) VALUES (NULL)")
 	if err != nil {
 		panic(err.Error()) // TODO: proper error handling instead of panic in your app
 	}
@@ -139,22 +144,32 @@ func DummyHttpServerInsert(w http.ResponseWriter, r *http.Request) {
 }
 
 func DummyHttpServerSelect(w http.ResponseWriter, r *http.Request) {
+	// get the id parameter from request
+	ids, ok := r.URL.Query()["id"]
+
+	if !ok || len(ids[0]) < 1 {
+		log.Fatal("Url Param 'id' is missing")
+	}
+
+	// we only want the single item.
+	id := ids[0]
+	log.Println("Url Param 'id' is: " + string(id))
 	// Prepare statement for select
-	id := -1
-	stmtSelect, err := readDb.Prepare("SELECT id FROM test_writes WHERE id=?")
+	stmtSelect, err := readDb.Prepare("SELECT last_update_time FROM dummy_data WHERE id=?")
 	if err != nil {
 		panic(err.Error()) // TODO: proper error handling instead of panic in your app
 	}
 	defer stmtSelect.Close() // Close the statement when we leave main() / the program terminates
 
-	err = stmtSelect.QueryRow(5).Scan(&id)
+	lastUpdateTime := ""
+	err = stmtSelect.QueryRow(id).Scan(&lastUpdateTime)
 	if err != nil {
 		panic(err.Error()) // TODO: proper error handling instead of panic in your app
 	}
 
-	log.Printf("retreived id=%d", id)
+	log.Printf("retreived id: %s lastUpdateTime: %s", string(id), lastUpdateTime)
 
-	response := fmt.Sprintf("inserted id: %d", 5)
+	response := fmt.Sprintf("id: %s, lastUpdateTime: %s", string(id), lastUpdateTime)
 	log.Print(response)
 	fmt.Fprintf(w, response)
 }

@@ -1,13 +1,15 @@
 {
 	"read_db": {
 		"server": "MYSQL_READ_HOSTNAME",
-		"database": "dummy_data",
+		"port": 3306,
+		"database": "DummyApp",
 		"username": "READ_USERNAME",
 		"password": "READ_PASSORD"
 	},
 	"write_db": {
-		"server": "MYSQL_READ_HOSTNAME"
-		"database": "dummy_data",
+		"server": "MYSQL_READ_HOSTNAME",
+		"port": 3306,
+		"database": "DummyApp",
 		"username": "WRITE_USERNAME",
 		"password": "WRITE_PASSORD"
 	},
