@@ -172,4 +172,5 @@ func DummyHttpServerSelect(w http.ResponseWriter, r *http.Request) {
 	response := fmt.Sprintf("id: %s, lastUpdateTime: %s", string(id), lastUpdateTime)
 	log.Print(response)
 	fmt.Fprintf(w, response)
+	// bleh
 }
