@@ -167,10 +167,9 @@ func DummyHttpServerSelect(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error()) // TODO: proper error handling instead of panic in your app
 	}
 
-	log.Printf("retreived id: %s lastUpdateTime: %s", string(id), lastUpdateTime)
+	log.rintf("retreived id: %s lastUpdateTime: %s", string(id), lastUpdateTime)
 
 	response := fmt.Sprintf("id: %s, lastUpdateTime: %s", string(id), lastUpdateTime)
 	log.Print(response)
 	fmt.Fprintf(w, response)
-	// bleh
 }
